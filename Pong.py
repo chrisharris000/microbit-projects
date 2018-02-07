@@ -90,3 +90,10 @@ while not playing:
                 
             if direction == 'SW':
                 direction = 'NW'
+                
+        if ball[1] == 5:
+            playing = False
+            display.clear()
+            display.show(Image.NO)
+            sleep(5000)
+            display.off()
