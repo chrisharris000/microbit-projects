@@ -11,6 +11,7 @@ def create_pipe():
 bird_y = 50
 led_bird_y = int(bird_y/20)
 speed = 0
+score = 0
 pipe = create_pipe()
 frame = 0
 delay = 20
@@ -45,6 +46,7 @@ while True:
         display.show(Image.SAD)
         sleep(500)
         display.clear()
+        display.scroll('SCORE: '+str(score))
         break
     
     if frame % pipe_shift_delay == 0:
@@ -52,5 +54,9 @@ while True:
         
     if frame % new_pipe_delay == 0:
         pipe = create_pipe()
+        score += 1
+        pipe_shift_delay -= 1
+        if pipe_shift_delay < 10:
+            pipe_shift_delay = 10
         
     sleep(20)
