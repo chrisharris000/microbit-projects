@@ -29,13 +29,11 @@ while True:
         
     if button_a.is_pressed():
         player_x -= 5
-        if player_x < 0:
-            player_x = 0
+        player_x %= 100
         
     if button_b.is_pressed():
         player_x += 5
-        if player_x > 99: #change if wanted like normal doodle jump
-            player_x = 99
+        player_x %= 100
             
     display.show(platforms)
     
