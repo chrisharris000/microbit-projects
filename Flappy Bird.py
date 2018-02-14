@@ -1,3 +1,4 @@
+#idea and code structure sourced from blog.withcode.uk
 from microbit import *
 from random import randint
 
