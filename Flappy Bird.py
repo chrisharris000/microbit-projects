@@ -25,7 +25,7 @@ while True:
     display.show(pipe)
     
     if button_a.was_pressed():
-        speed -= 8
+        speed = -8
     
     speed += 1
     if speed > 2:
