@@ -17,7 +17,6 @@ x_direction = choice(directions)
 y_direction = choice(directions)
 delay = 1000
 playing = False
-bat_map = {0: 4, 1: 3, 2: 2, 3: 1, 4: 0}
 
 def move_ball():
     global ball_x, ball_y, x_direction, y_direction, counter, a_bat, b_bat, a_points, b_points
@@ -86,8 +85,7 @@ while playing:
     msg = radio.receive()
     if msg:
         display.set_pixel(b_bat,0,0) #player b's bat off
-        #b_bat = abs(4-int(msg[-1]))
-        b_bat = bat_map[int(msg[-1])]       #b_bat = 4-int(msg[-1])
+        b_bat = 4-int(msg[-1])
         
     if running_time() > off_time:
         off_time = running_time() + delay

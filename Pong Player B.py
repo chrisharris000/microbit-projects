@@ -7,7 +7,7 @@ ball_x = 2
 ball_y = 2
 ball_brightness = 9
 playing = False
-bat_map = {0: 4, 1: 3, 2: 2, 3: 1, 4: 0}
+
 display.show(Image.ARROW_E,wait=False)
 while not playing:
     if button_b.is_pressed():
@@ -39,11 +39,11 @@ while playing:
     if msg:
         if msg.startswith('ax:'):
             display.set_pixel(a_bat,0,0)
-            a_bat = bat_map[int(msg[-1])]       #a_bat = 4-int(msg[-1])
+            a_bat = 4-int(msg[-1])
             
         if msg.startswith('x:'):
             display.set_pixel(ball_x,ball_y,0)
-            ball_x,ball_y = bat_map[int(msg[2])],bat_map[int(msg[-1])]      #ball_x,ball_y = 4-int(msg[2]),4-int(msg[-1])
+            ball_x,ball_y = 4-int(msg[2]),4-int(msg[-1])
             
         if msg == 'GAME OVER':
             display.clear()
