@@ -1,5 +1,5 @@
 from microbit import *
-import neopixel
+import neopixel, time
 
 COLOURS = {"red":(128, 0, 0),
             "orange":(128, 64, 0),
@@ -17,6 +17,7 @@ COLOURS = {"red":(128, 0, 0),
 
 colour_list = [COLOURS["red"], COLOURS["yellow"], COLOURS["green"],
                 COLOURS["cyan"], COLOURS["blue"], COLOURS["bluemagenta"]]
+
 def colour_wheel(speed):
     # 6 colours cycle around the outside 6 LEDs on 1 board
     global colour_list
@@ -84,7 +85,6 @@ def figure_eight(colour, speed):
         np.show()
         sleep(speed)
 
-
 def eight_formula(x):
     if x <= 2:
         return x
@@ -110,5 +110,12 @@ def fill(n_LEDs, colour, np):
         np[i] = colour
     return np
 
+colour = colour_list[0]
 while True:
-    figure_eight(COLOURS["redmagenta"], 100)
+    if button_a.was_pressed():
+        index = (colour_list.index(colour) - 1) % len(colour_list)
+        colour = colour_list[index]
+
+    if button_b.was_pressed():
+        index = (colour_list.index(colour) + 1) % len(colour_list)
+        colour = colour_list[index]
