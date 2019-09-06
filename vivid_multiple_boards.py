@@ -16,8 +16,8 @@ COLOURS = {"red":(128, 0, 0),
             "white":(128, 128, 128)}
 
 def colour_flow(speed):
-    colour_list = [COLOURS["red"],  COLOURS["green"],
-                COLOURS["blue"], COLOURS["off"]]
+    colour_list = [COLOURS["red"],  COLOURS["yellow"],
+                COLOURS["greencyan"], COLOURS["bluemagenta"]]
     n_boards = 4
     n_LEDs = n_boards * 7
     np = neopixel.NeoPixel(pin0, n_LEDs)
@@ -70,6 +70,15 @@ def progressive_fill(colour, speed, undo_fill = False, clear_all = False, increa
             np.show()
             np[i] = COLOURS["off"]
 
+def smooth_rainbow():
+    colour_order = [COLOURS["red"],COLOURS["yellow"],COLOURS["green"],
+                    COLOURS["cyan"],COLOURS["blue"],COLOURS["redmagenta"]]
+
+    pixel_order = [[2,3],[1,4,6],[0,5]] # 0 indexed
+    n_boards = 4
+    n_LEDs = n_boards * 7
+    np = neopixel.NeoPixel(pin0, n_LEDs)
+
 def set_board(colour, board_num, np):
     for i in range(7):
         np[board_num*7 + i] = colour
@@ -84,4 +93,4 @@ def fill(n_LEDs, colour, np):
     return np
 
 while True:
-    progressive_fill(COLOURS["green"], 200, increasing = True)
+    smooth_rainbow()
