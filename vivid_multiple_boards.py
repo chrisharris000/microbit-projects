@@ -1,5 +1,5 @@
 from microbit import *
-import neopixel
+import neopixel, math
 
 COLOURS = {"red":(128, 0, 0),
             "orange":(128, 64, 0),
@@ -15,26 +15,73 @@ COLOURS = {"red":(128, 0, 0),
             "off": (0, 0, 0),
             "white":(128, 128, 128)}
 
-colour_list = [COLOURS["red"],  COLOURS["green"],
-                COLOURS["cyan"], COLOURS["bluemagenta"]]
-
-def colour_flow():
+def colour_flow(speed):
+    colour_list = [COLOURS["red"],  COLOURS["green"],
+                COLOURS["blue"], COLOURS["off"]]
     n_boards = 4
     n_LEDs = n_boards * 7
     np = neopixel.NeoPixel(pin0, n_LEDs)
     for i in range(n_boards):
         for i in range(n_boards):
-            set_board(colour_list[i], i*7, np)
-        sleep(500)
-        rotate(colour_list, 1)
+            set_board(colour_list[i], i, np)
+        sleep(speed)
+        colour_list = rotate(colour_list, 1)
 
-def set_board(colour, index, np):
+def flash(colour, speed):
+    n_boards = 4
+    n_LEDs = n_boards * 7
+    np = neopixel.NeoPixel(pin0, n_LEDs)
     for i in range(7):
-        np[index + i] = colour
+        fill(n_LEDs, colour, np)
+        np.show()
+        sleep(speed)
+        r, g, b = colour
+        colour = (r//2, g//2, b//2)
+
+def progressive_fill(colour, speed, undo_fill = False, clear_all = False, increasing = False):
+    n_boards = 4
+    n_LEDs = n_boards * 7
+    np = neopixel.NeoPixel(pin0, n_LEDs)
+
+    for i in range(n_LEDs):
+        np[i] = colour
+        if not increasing:
+            sleep(speed)
+        else:
+            k = -math.log(1/3)/(7*n_boards)
+            t = i
+            wait_time = speed * math.exp(-k*t)
+            sleep(wait_time)
+        np.show()
+
+    if undo_fill:
+        for i in range(n_LEDs):
+            np[n_LEDs - i - 1] = COLOURS["off"]
+            np.show()
+            sleep(speed)
+
+    elif clear_all:
+        for i in range(n_LEDs):
+            np[i] = COLOURS["off"]
+        np.show()
+
+    else:
+        for i in range(n_LEDs):
+            np.show()
+            np[i] = COLOURS["off"]
+
+def set_board(colour, board_num, np):
+    for i in range(7):
+        np[board_num*7 + i] = colour
     np.show()
 
 def rotate(l, n):
     return l[n:] + l[:n]
 
+def fill(n_LEDs, colour, np):
+    for i in range(n_LEDs):
+        np[i] = colour
+    return np
+
 while True:
-    colour_flow()
+    progressive_fill(COLOURS["green"], 200, increasing = True)
