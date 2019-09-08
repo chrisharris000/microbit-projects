@@ -1,5 +1,5 @@
 from microbit import *
-import neopixel, math
+import neopixel, math, random
 
 COLOURS = {"red":(128, 0, 0),
             "orange":(128, 64, 0),
@@ -79,6 +79,60 @@ def smooth_rainbow():
     n_LEDs = n_boards * 7
     np = neopixel.NeoPixel(pin0, n_LEDs)
 
+    for rotation in range(len(colour_order)):
+        for index in range(n_LEDs):
+            board_num = index // 7  # determines which board current pixel is on
+            pixel_num = index % 7   # determines which pixel on the board the current pixel is
+            if board_num in (0, 2):
+                if pixel_num in (2,3):
+                    np[index] = colour_order[0]
+                elif pixel_num in (1,4,6):
+                    np[index] = colour_order[1]
+                elif pixel_num in (0,5):
+                    np[index] = colour_order[2]
+
+            else:
+                if pixel_num in (2,3):
+                    np[index] = colour_order[3]
+                elif pixel_num in (1,4,6):
+                    np[index] = colour_order[4]
+                elif pixel_num in (0,5):
+                    np[index] = colour_order[5]
+        np.show()
+        colour_order = rotate(colour_order,1)
+        sleep(100)
+
+def random_colours():
+    n_boards = 4
+    n_LEDs = n_boards * 7
+    np = neopixel.NeoPixel(pin0, n_LEDs)
+    unassigned = list(range(n_LEDs))
+
+    while unassigned:
+        pixel = random.choice(unassigned)
+        colour = random.choice(list(COLOURS.values()))
+        np[pixel] = colour
+        np.show()
+        unassigned.remove(pixel)
+        sleep(500)
+
+def colour_wheel(speed):
+    colour_list = [COLOURS["red"], COLOURS["yellow"], COLOURS["green"],
+                COLOURS["cyan"], COLOURS["blue"], COLOURS["bluemagenta"]]
+    n_boards = 4
+    n_LEDs = n_boards * 7
+    np = neopixel.NeoPixel(pin0, n_LEDs)
+
+    for rotation in range(len(colour_list)):
+        for i, colour in enumerate(colour_list):
+            np[i] = colour
+            np[i + 7] = colour
+            np[i + 14] = colour
+            np[i + 21] = colour
+        np.show()
+        sleep(speed)
+        colour_list = rotate(colour_list,1)
+
 def set_board(colour, board_num, np):
     for i in range(7):
         np[board_num*7 + i] = colour
@@ -92,5 +146,14 @@ def fill(n_LEDs, colour, np):
         np[i] = colour
     return np
 
+colour_list = [COLOURS["red"], COLOURS["yellow"], COLOURS["green"],
+                COLOURS["cyan"], COLOURS["blue"], COLOURS["bluemagenta"]]
+colour = colour_list[0]
 while True:
-    smooth_rainbow()
+    if button_a.was_pressed():
+        index = (colour_list.index(colour) - 1) % len(colour_list)
+        colour = colour_list[index]
+
+    if button_b.was_pressed():
+        index = (colour_list.index(colour) + 1) % len(colour_list)
+        colour = colour_list[index]
