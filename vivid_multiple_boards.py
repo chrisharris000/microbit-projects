@@ -157,3 +157,5 @@ while True:
     if button_b.was_pressed():
         index = (colour_list.index(colour) + 1) % len(colour_list)
         colour = colour_list[index]
+
+    colour_flow(100)

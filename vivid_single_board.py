@@ -112,6 +112,7 @@ def fill(n_LEDs, colour, np):
 
 colour = colour_list[0]
 while True:
+    colour_wheel(100)
     if button_a.was_pressed():
         index = (colour_list.index(colour) - 1) % len(colour_list)
         colour = colour_list[index]
